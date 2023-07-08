@@ -32,10 +32,10 @@
                 @foreach ($return as $rs)
                     <tr>
                         <td class="align-middle">{{ $loop->iteration }}</td>
-                        <td class="align-middle">{{ $rs->user->name }}</td>
-                        <td class="align-middle">{{ $rs->car->brand }}</td>
-                        <td class="align-middle">{{ $rs->car->model }}</td>
-                        <td class="align-middle">{{ $rs->car->plate_number }}</td>
+                        <td class="align-middle">{{ $rs->booking->user->name }}</td>
+                        <td class="align-middle">{{ $rs->booking->car->brand }}</td>
+                        <td class="align-middle">{{ $rs->booking->car->model }}</td>
+                        <td class="align-middle">{{ $rs->booking->car->plate_number }}</td>
                         <td class="align-middle">{{ date('d/m/Y', strtotime($rs->return_date)) }}</td>
                         <td class="align-middle">{{ $rs->rental_fee }}</td>
                         <td class="align-middle">

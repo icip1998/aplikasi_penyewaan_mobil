@@ -1,33 +1,35 @@
 @extends('layouts.app')
-@section('title', 'Show Peminjaman')
+@section('title', 'Show Pengembalian')
 @section('contents')
-    <h1 class="mb-0">Detail Peminjaman</h1>
+    <h1 class="mb-0">Detail Pengembalian</h1>
 
     <hr />
     <div class="row">
         <div class="col mb-3">
             <label class="form-label">Merek</label>
-            <input type="text" class="form-control" placeholder="DD/MM/YYYY" value="{{ $booking->car->brand }}" readonly>
+            <input type="text" class="form-control" placeholder="DD/MM/YYYY" value="{{ $return->booking->car->brand }}"
+                readonly>
         </div>
         <div class="col mb-3">
             <label class="form-label">Model</label>
-            <input type="text" class="form-control" placeholder="DD/MM/YYYY" value="{{ $booking->car->model }}" readonly>
+            <input type="text" class="form-control" placeholder="DD/MM/YYYY" value="{{ $return->booking->car->model }}"
+                readonly>
         </div>
         <div class="col mb-3">
             <label class="form-label">Nomor Flat</label>
-            <input type="text" class="form-control" placeholder="" value="{{ $booking->car->plate_number }}" readonly>
+            <input type="text" class="form-control" placeholder="" value="{{ $return->booking->car->plate_number }}"
+                readonly>
         </div>
     </div>
     <div class="row">
         <div class="col mb-3">
-            <label class="form-label">Start Date</label>
+            <label class="form-label">Tangal Pengembalian</label>
             <input type="text" class="form-control" placeholder="DD/MM/YYYY"
-                value="{{ date('d/m/Y', strtotime($booking->start_date)) }}" readonly>
+                value="{{ date('d/m/Y', strtotime($return->return_date)) }}" readonly>
         </div>
         <div class="col mb-3">
-            <label class="form-label">End Date</label>
-            <input type="text" class="form-control" placeholder="DD/MM/YYYY"
-                value="{{ date('d/m/Y', strtotime($booking->end_date)) }}" readonly>
+            <label class="form-label">Tarif Sewa</label>
+            <input type="text" class="form-control" placeholder="DD/MM/YYYY" value="{{ $return->rental_fee }}" readonly>
         </div>
     </div>
 @endsection

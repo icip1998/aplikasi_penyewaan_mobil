@@ -16,7 +16,16 @@ class ReturnModel extends Model
         'rental_fee',
     ];
 
-    // Relationship dengan peminjaman mobil
+    public function car()
+    {
+        return $this->belongsTo(Car::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function booking()
     {
         return $this->belongsTo(Booking::class);

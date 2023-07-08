@@ -20,22 +20,21 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="labels">Mobil</label>
-                                <select name="plate_number"
-                                    class="form-control form-control-user @error('plate_number')is-invalid @enderror"
-                                    id="plate_number" placeholder="Mobil">
+                                <select name="car_id"
+                                    class="form-control form-control-user @error('car_id')is-invalid @enderror"
+                                    id="car_id" placeholder="Mobil">
                                     <option value="">Pilih Mobil</option>
-                                    @if ($bookings->count() > 0)
-                                        @foreach ($bookings as $booking)
-                                            <option value="{{ $booking->car->plate_number }}">
-                                                {{ $booking->car->brand }} {{ $booking->car->model }}
-                                                {{ $booking->car->plate_number }}</option>
+                                    @if ($availableCars->count() > 0)
+                                        @foreach ($availableCars as $car)
+                                            <option value="{{ $car->id }}">{{ $car->brand }} {{ $car->model }}
+                                                {{ $car->car_id }}</option>
                                         @endforeach
                                     @else
-                                        <option>Tidak ada booking yang tersedia saat ini.</option>
+                                        <option>Tidak ada mobil yang tersedia saat ini.</option>
                                     @endif
                                 </select>
 
-                                @error('plate_number')
+                                @error('car_id')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>

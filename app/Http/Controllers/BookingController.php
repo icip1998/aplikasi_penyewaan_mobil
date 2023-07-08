@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Car;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -39,14 +40,15 @@ class BookingController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
         ])->validate();
 
-
         $car = Car::findOrFail($request->car_id);
         if (!$car->available) {
             return back()->with('error', 'Mobil tidak tersedia.');
         }
 
+        $userId = Auth::id();
+
         Booking::create([
-            'user_id' => 1,
+            'user_id' => $userId,
             'car_id' => $request->car_id,
             'start_date' => date('Y-m-d', strtotime($request->start_date)),
             'end_date' => date('Y-m-d', strtotime($request->end_date)),

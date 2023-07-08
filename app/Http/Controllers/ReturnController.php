@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Car;
 use App\Models\ReturnModel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 
 class ReturnController extends Controller
 {
@@ -15,7 +16,7 @@ class ReturnController extends Controller
      */
     public function index()
     {
-        $return = ReturnModel::with('booking')->orderBy('created_at', 'DESC')->get();
+        $return = ReturnModel::with('booking.car', 'booking.user')->orderBy('created_at', 'DESC')->get();
 
         return view('returns.index', compact('return'));
     }
@@ -25,8 +26,8 @@ class ReturnController extends Controller
      */
     public function create()
     {
-        $bookings = Booking::orderBy('created_at', 'DESC')->get();
-        return view('returns.create', compact('bookings'));
+        $availableCars = Car::where('available', false)->get();
+        return view('returns.create', compact('availableCars'));
     }
 
     /**
@@ -35,21 +36,23 @@ class ReturnController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'plate_number' => 'required'
+            'car_id' => 'required'
         ])->validate();
 
-        $car = Car::where('plate_number', $request->plate_number)->first();
+        $car = Car::where('id', $request->car_id)->first();
         if (!$car) {
             return back()->with('error', 'Mobil tidak tersedia.');
         }
 
-        $booking = Booking::where('car_id', $car->id)->whereNull('return_date')->first();
+        $booking = Booking::where('car_id', $car->id)->first();
         if (!$booking) {
             return back()->with('error', 'Tidak ada peminjaman aktif untuk mobil ini.');
         }
 
-        $startDate = $booking->start_date;
-        $endDate = $request->input('return_date', now()->toDateString());
+        $return_date = date('Y-m-d');
+        $startDate = Carbon::parse($booking->start_date);
+        $endDate = Carbon::parse($return_date);
+
         $rentalDays = $startDate->diffInDays($endDate);
 
         $rentalFee = $rentalDays * floatval($car->rental_rate);
@@ -63,9 +66,9 @@ class ReturnController extends Controller
         $car->available = true;
         $car->save();
 
-        Booking::create($request->all());
+        ReturnModel::create($request->all());
 
-        return redirect()->route('returns')->with('success', 'Booking added successfully');
+        return redirect()->route('returns')->with('success', 'Return added successfully');
     }
 
     /**
@@ -73,9 +76,7 @@ class ReturnController extends Controller
      */
     public function show(string $id)
     {
-        $return = Booking::findOrFail($id);
-        $availableCars = Car::where('available', true)->get();
-
-        return view('returns.show', compact('return', 'availableCars'));
+        $return = ReturnModel::findOrFail($id);
+        return view('returns.show', compact('return'));
     }
 }
